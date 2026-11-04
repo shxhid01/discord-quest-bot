@@ -41,13 +41,13 @@ The recurring service runs `--all --claim --loop 86400`. Avoid running a one-sho
 
 ## Code structure
 
-- `orion-headless.mjs` — CLI entry point and run loop.
+- `quest-bot-headless.mjs` — CLI entry point and run loop.
 - `lib/runtime.mjs` — configuration, arguments, and logging.
 - `lib/transport.mjs` — Discord HTTP requests.
 - `lib/quests.mjs` — quest selection and task handlers.
 
 ## Limitations
 
-Console-only quests and in-game achievements cannot be automated. Stream and activity quests require a usable DM or voice channel; Discord may still reject or not credit progress. Some reward claims require a CAPTCHA in Discord. Activity achievements may require OAuth authorization and can fail if the activity backend rejects the request.
+Console-only quests and in-game achievements cannot be automated. Stream and activity quests require a usable DM or voice channel; Discord may still reject or not credit progress. Some reward claims require a CAPTCHA in Discord. Activity achievements may automatically authorize an application without prompting; Orion attempts to revoke its grant afterward, but the activity receives an authorization code.
 
 Run `docker compose run --rm orion --help` for all options.

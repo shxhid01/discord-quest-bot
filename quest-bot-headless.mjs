@@ -5,7 +5,7 @@
  * orion-headless v2 — server-side Discord quest runner.
  * Node >= 18. No dependencies.
  *
- *   DQUEST_TOKEN=... node orion-headless.mjs --all --claim
+ *   DQUEST_TOKEN=... node quest-bot-headless.mjs --all --claim
  */
 
 import fs from 'node:fs';

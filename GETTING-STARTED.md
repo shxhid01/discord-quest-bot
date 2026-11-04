@@ -42,7 +42,7 @@ All runnable quests run concurrently by default. Video and heartbeat progress up
 docker compose run --rm orion --all --claim --concurrency 2
 ```
 
-Achievement quests may ask you to authorize the activity. This grants the listed OAuth scopes to that activity; Orion attempts to revoke the grant it created afterward. Read the prompt before answering. `--yes` skips the prompt, and runs without a TTY automatically accept it.
+Achievement quests can automatically authorize their activity with the `identify`, `applications.commands`, and `applications.entitlements` OAuth scopes, without prompting. Orion attempts to revoke the grant it created afterward; the activity receives an authorization code.
 
 ## Run on a schedule
 
@@ -59,9 +59,9 @@ The service runs a pass every 24 hours. Do not run a separate one-shot command w
 Node.js 18 or newer loads `.env` automatically from the current directory:
 
 ```bash
-node orion-headless.mjs --check
-node orion-headless.mjs --all --dry-run
-node orion-headless.mjs --all --claim
+node quest-bot-headless.mjs --check
+node quest-bot-headless.mjs --all --dry-run
+node quest-bot-headless.mjs --all --claim
 ```
 
 ## Useful options

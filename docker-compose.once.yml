@@ -1,0 +1,8 @@
+services:
+  orion:
+    build: .
+    image: orion-headless:2
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    command: ["--all", "--claim", "--once"]

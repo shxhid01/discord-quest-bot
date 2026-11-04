@@ -1,0 +1,14 @@
+services:
+  orion:
+    build: .
+    image: orion-headless:2
+    container_name: orion
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/app/data
+    # Uncomment to run as your host user instead of uid 1000
+    # user: "${UID:-1000}:${GID:-1000}"
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }

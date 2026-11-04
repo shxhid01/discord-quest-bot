@@ -4,6 +4,7 @@ RUN apk add --no-cache tini
 WORKDIR /app
 
 COPY --chown=node:node orion-headless.mjs ./
+COPY --chown=node:node lib/ ./lib/
 RUN mkdir -p /app/data && chown node:node /app/data
 
 USER node

@@ -10,7 +10,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { CFG, ABORTED, abort, sleep, rnd, log, die, loadEnvFile, applyEnv, parseArgs } from './lib/runtime.mjs';
+import { CFG, ABORTED, abort, sleep, rnd, log, progress, preserveProgress, die, loadEnvFile, applyEnv, parseArgs } from './lib/runtime.mjs';
 import { HEADERS, api } from './lib/transport.mjs';
 import { notExpired, orbs, nameOf, select, runQuest } from './lib/quests.mjs';
 
@@ -72,8 +72,32 @@ async function pass(me) {
 
 /* ── main ──────────────────────────────────────────────────── */
 
+async function testDisplay() {
+  CFG.LOG_FILE = '';
+  const quests = Array.from({ length: CFG.TEST }, (_, index) => {
+    const type = index % 2 ? 'video' : 'game';
+    const suffix = index < 2 ? '' : ` ${index + 1}`;
+    return { id: `test-${index + 1}`, name: `Example ${type === 'game' ? 'Game' : 'Video'} Quest${suffix}`, type, target: 100 };
+  });
+  log('test mode: simulated quests; no Discord requests or reward claims');
+  for (const value of [0, 25, 50, 75, 100]) {
+    if (ABORTED) break;
+    for (const q of quests) {
+      progress(q.id, q.name, `${q.type} ${value}/${q.target}`, `test ${q.type} progress: ${q.name} — ${value}/${q.target}`);
+    }
+    await sleep(600);
+  }
+  preserveProgress();
+  if (!ABORTED) {
+    for (const q of quests) log(`test quest completed: ${q.name}`, 'ok');
+    log('test mode finished', 'ok');
+  }
+  return 0;
+}
+
 async function main() {
   if (Number(process.versions.node.split('.')[0]) < 18) die('Node >= 18 required (global fetch)', 1);
+  if (CFG.TEST) return testDisplay();
   if (!CFG.TOKEN) die('DQUEST_TOKEN is not set', 2);
   if (CFG.TOKEN.startsWith('Bot ')) CFG.TOKEN = CFG.TOKEN.slice(4);
   HEADERS.Authorization = CFG.TOKEN;

@@ -23,6 +23,9 @@ The dry run does not enroll, advance, or claim quests. The real run processes al
 ## Common commands
 
 ```bash
+# Preview fake quest progress without contacting Discord
+docker compose run --rm orion --test
+
 # List open quests
 docker compose run --rm orion --check
 

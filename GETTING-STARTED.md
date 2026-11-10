@@ -30,13 +30,24 @@ docker compose run --rm orion --all --dry-run
 
 `--check` lists uncompleted, unexpired quests returned by Discord. The dry run shows which quests Orion would enroll in or run; it does not change quest progress or claim rewards. Some open quests may not be runnable.
 
+To preview the progress display using fake quests, run:
+
+```bash
+docker compose run --rm orion --test
+docker compose run --rm orion --test 5
+```
+
+Test mode defaults to two fake quests; add a positive integer to choose another count. `-test 5` also works. The display shows how many quests do not fit if the terminal is too small.
+
+Test mode keeps the completed quest progress visible and prints completion messages below it. It does not need a token, contact Discord, write the log or heartbeat file, or claim rewards. It overrides `--all` and `--claim` if they are also provided. Docker Compose still requires its configured `.env` file.
+
 ## 3. Run quests
 
 ```bash
 docker compose run --rm orion --all --claim
 ```
 
-All runnable quests run concurrently by default. Video and heartbeat progress updates are logged. To limit concurrency, provide a number:
+All runnable quests run concurrently by default. In an interactive terminal, active quest progress appears in columns and updates in place. Redirected output, JSON logs, and the log file retain one progress update per line. To limit concurrency, provide a number:
 
 ```bash
 docker compose run --rm orion --all --claim --concurrency 2
@@ -73,6 +84,7 @@ node quest-bot-headless.mjs --all --claim
 | `--exclude <id\|name,...>` | Skip matching quest IDs or names. |
 | `--claim` | Attempt to claim rewards after completion. |
 | `--dry-run` | Show the plan without enrolling, advancing, or claiming. |
+| `--test [n]`, `-test [n]` | Display progress for `n` simulated quests (default 2), without contacting Discord. |
 | `--check` | List open quests and exit. |
 | `--once` | Run one cycle without re-polling. |
 | `--concurrency <n>` | Limit the number of quests in flight. |
